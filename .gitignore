@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: 0BSD
+
+*
+!/LICENSE
+!/Pipfile
+!/Pipfile.lock
+!/angle
+!/depot_tools
+!/libepoxy
+!/update
+!/qemu
+!/run
+!/virglrenderer
+!/.gitignore
+!/.gitmodules

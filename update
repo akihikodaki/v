@@ -1,0 +1,26 @@
+#!/bin/bash
+# SPDX-License-Identifier: 0BSD
+
+set -eux
+cd "$(dirname "${BASH_SOURCE[0]}")"
+git pull
+git submodule update --init
+export DEPOT_TOOLS_UPDATE=0
+export PATH="$PWD/depot_tools:$PATH"
+pipenv sync
+cd angle
+scripts/bootstrap.py
+gclient sync -D
+gn gen "--args=is_debug=false install_prefix=\"$PWD/../..\"" ../build/angle
+cd ..
+ninja -C build/angle
+[ -e build/libepoxy/meson-info ] || meson setup "--pkg-config-path=$PWD/lib/pkgconfig" "--prefix=$PWD" -Degl=yes build/libepoxy libepoxy
+meson install -C build/libepoxy
+[ -e build/virglrenderer/meson-info ] || pipenv run meson setup "--pkg-config-path=$PWD/lib/pkgconfig" "--prefix=$PWD" build/virglrenderer virglrenderer
+pipenv run meson install -C build/virglrenderer
+mkdir -p build/qemu
+cd build/qemu
+PKG_CONFIG_PATH="$PWD/../../lib/pkgconfig" ../../qemu/configure "--prefix=$PWD/../.." --target-list=aarch64-softmmu
+make "-j$(getconf _NPROCESSORS_ONLN)" install
+[ -e ../../edk2-arm-vars.fd ] || cp pc-bios/edk2-arm-vars.fd ../..
+cd ../..

@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: 0BSD
+
+[submodule "angle"]
+	path = angle
+	url = https://chromium.googlesource.com/angle/angle
+[submodule "depot_tools"]
+	path = depot_tools
+	url = https://chromium.googlesource.com/chromium/tools/depot_tools
+[submodule "libepoxy"]
+	path = libepoxy
+	url = ../libepoxy.git
+[submodule "virglrenderer"]
+	path = virglrenderer
+	url = ../virglrenderer.git
+[submodule "qemu"]
+	path = qemu
+	url = ../qemu.git
